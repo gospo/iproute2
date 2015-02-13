@@ -399,7 +399,7 @@ int get_addr_1(inet_prefix *addr, const char *name, int family)
 
 	if (strchr(name, ':')) {
 		addr->family = AF_INET6;
-		if (family != AF_UNSPEC && family != AF_INET6)
+		if (family != AF_UNSPEC && family != AF_INET6 && family != AF_INET)
 			return -1;
 		if (inet_pton(AF_INET6, name, addr->data) <= 0)
 			return -1;
@@ -701,6 +701,8 @@ static const char *resolve_address(const void *addr, int len, int af)
 const char *format_host(int af, int len, const void *addr,
 			char *buf, int buflen)
 {
+	if (af == AF_INET && len == 16)
+		af = AF_INET6;
 #ifdef RESOLVE_HOSTNAMES
 	if (resolve_hosts) {
 		const char *n;

@@ -661,7 +661,7 @@ static int parse_one_nh(struct rtmsg *r, struct rtattr *rta,
 			inet_prefix addr;
 			NEXT_ARG();
 			get_addr(&addr, *argv, r->rtm_family);
-			if (r->rtm_family == AF_UNSPEC)
+			if (addr.family == AF_UNSPEC)
 				r->rtm_family = addr.family;
 			rta_addattr_l(rta, 4096, RTA_GATEWAY, &addr.data, addr.bytelen);
 			rtnh->rtnh_len += sizeof(struct rtattr) + addr.bytelen;
@@ -775,7 +775,7 @@ static int iproute_modify(int cmd, unsigned flags, int argc, char **argv)
 			gw_ok = 1;
 			NEXT_ARG();
 			get_addr(&addr, *argv, req.r.rtm_family);
-			if (req.r.rtm_family == AF_UNSPEC)
+			if (addr.family == AF_UNSPEC)
 				req.r.rtm_family = addr.family;
 			addattr_l(&req.n, sizeof(req), RTA_GATEWAY, &addr.data, addr.bytelen);
 		} else if (strcmp(*argv, "from") == 0) {
